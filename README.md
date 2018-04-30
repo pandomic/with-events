@@ -1,3 +1,5 @@
+![Build status](https://travis-ci.org/pandomic/with-events.svg?branch=master)
+
 # WithEvents
 A simple events system for Ruby apps.
 
