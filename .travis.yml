@@ -3,7 +3,7 @@ language: ruby
 rvm:
   - 2.3.3
 before_install:
-  - gem install bundler -v 1.15.3
+  - gem install bundler -v 1.16.1
   - bundle install
   - rubocop
   - rspec
