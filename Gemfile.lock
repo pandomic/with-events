@@ -1,0 +1,105 @@
+PATH
+  remote: .
+  specs:
+    with_events (0.1.0)
+      activesupport (~> 4.2.7)
+      require_all (~> 1.4.0)
+      sidekiq (~> 3.5.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (4.2.10)
+      i18n (~> 0.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
+    ast (2.4.0)
+    celluloid (0.17.3)
+      celluloid-essentials
+      celluloid-extras
+      celluloid-fsm
+      celluloid-pool
+      celluloid-supervision
+      timers (>= 4.1.1)
+    celluloid-essentials (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-extras (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-fsm (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-pool (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-supervision (0.20.6)
+      timers (>= 4.1.1)
+    coderay (1.1.2)
+    concurrent-ruby (1.0.5)
+    connection_pool (2.2.1)
+    diff-lcs (1.3)
+    hitimes (1.2.6)
+    i18n (0.9.5)
+      concurrent-ruby (~> 1.0)
+    json (1.8.6)
+    method_source (0.9.0)
+    minitest (5.11.3)
+    parallel (1.12.1)
+    parser (2.5.1.0)
+      ast (~> 2.4.0)
+    powerpack (0.1.1)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    rainbow (2.2.2)
+      rake
+    rake (12.3.1)
+    redis (3.3.5)
+    redis-namespace (1.6.0)
+      redis (>= 3.0.4)
+    require_all (1.4.0)
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+    rspec-core (3.7.1)
+      rspec-support (~> 3.7.0)
+    rspec-expectations (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-mocks (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-support (3.7.1)
+    rubocop (0.51.0)
+      parallel (~> 1.10)
+      parser (>= 2.3.3.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-progressbar (1.9.0)
+    sidekiq (3.5.4)
+      celluloid (~> 0.17.2)
+      connection_pool (~> 2.2, >= 2.2.0)
+      json (~> 1.0)
+      redis (~> 3.2, >= 3.2.1)
+      redis-namespace (~> 1.5, >= 1.5.2)
+    sqlite3 (1.3.13)
+    thread_safe (0.3.6)
+    timers (4.1.2)
+      hitimes
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
+    unicode-display_width (1.3.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  pry
+  rspec
+  rubocop (~> 0.51.0)
+  sqlite3
+  with_events!
+
+BUNDLED WITH
+   1.16.1
