@@ -7,13 +7,13 @@ require 'with_events/version'
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'with_events'
+  s.name        = 'with-events'
   s.version     = WithEvents::VERSION
   s.authors     = ['Vlad Gramuzov']
   s.email       = ['vlad.gramuzov@gmail.com']
-  s.homepage    = 'http://google.com'
-  s.summary     = 'Summary of Rails::Events.'
-  s.description = 'Description of Rails::Events.'
+  s.homepage    = 'https://github.com/pandomic/with-events'
+  s.summary     = 'A simple events system for Ruby apps.'
+  s.description = 'A simple events system for Ruby apps.'
   s.license     = 'MIT'
 
   s.files = Dir[
