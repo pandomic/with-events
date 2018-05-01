@@ -11,7 +11,7 @@ module WithEvents
 
     def perform(appearance)
       Stream.streams.each do |stream|
-        process_stream(stream, appearance)
+        process_stream(stream, appearance.to_sym)
       end
     end
 
