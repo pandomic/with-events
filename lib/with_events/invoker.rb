@@ -7,7 +7,7 @@ module WithEvents
     end
 
     def invoke(context, *args)
-      return context.instance_exec(callable, *args) if proc?
+      return context.instance_exec(*args, &callable) if proc?
       return callable.new.call(context, *args) if class?
       return context.public_send(callable, *args) if symbol?(context)
 

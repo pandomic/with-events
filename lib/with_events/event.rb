@@ -2,7 +2,7 @@
 
 module WithEvents
   class Event
-    attr_reader :name, :condition, :callback, :options
+    attr_reader :name, :options
 
     def initialize(name, klass, options = {})
       @name = name
@@ -18,12 +18,12 @@ module WithEvents
 
     private
 
-    attr_reader :klass, :stream
+    attr_reader :klass, :stream, :condition, :callback
 
     def define_condition
       klass.instance_exec(name, condition) do |name, condition|
         define_method("may_#{name}?") do
-          WithEvents::Invoker.new(condition).invoke(self)
+          Invoker.new(condition).invoke(self)
         end
       end
     end
@@ -32,7 +32,7 @@ module WithEvents
       klass.instance_exec(name, stream, callback) do |name, stream, callback|
         define_method("#{name}!") do
           stream&.notify(name, self)
-          WithEvents::Invoker.new(callback).invoke(self)
+          Invoker.new(callback).invoke(self)
         end
       end
     end

@@ -11,25 +11,37 @@ module WithEvents
 
     def perform(appearance)
       Stream.streams.each do |stream|
-        stream.events.each do |event|
-          next unless valid_event?(event, appearance)
-          call(event) if may_call?(event)
-        end
+        process_stream(stream, appearance)
       end
     end
 
     private
 
-    def call(event)
-      event.public_send("#{event.name}!")
+    def process_stream(stream, appearance)
+      stream.events.each do |event|
+        next unless valid_event?(event, appearance)
+        event.options[:batch].each do |resource|
+          call(event, resource) if may_call?(event, resource)
+        end
+      end
     end
 
-    def may_call?(event)
-      event.public_send("may_#{event.name}?")
+    def call(event, resource)
+      resource.public_send("#{event.name}!")
+    end
+
+    def may_call?(event, resource)
+      resource.public_send("may_#{event.name}?")
+    end
+
+    def valid_batch?(event)
+      event.options[:batch].is_a?(Enumerable)
     end
 
     def valid_event?(event, appearance)
-      background_event?(event) && valid_appearance?(event, appearance)
+      background_event?(event) &&
+        valid_appearance?(event, appearance) &&
+        valid_batch?(event)
     end
 
     def background_event?(event)
