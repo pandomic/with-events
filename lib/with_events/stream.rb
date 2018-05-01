@@ -24,7 +24,7 @@ module WithEvents
 
     def notify(name, resource)
       return if watchers[name].nil?
-      watchers[name].each { |watcher| resource.instance_exec(watcher) }
+      watchers[name].each { |watcher| resource.instance_exec(&watcher) }
     end
 
     class << self

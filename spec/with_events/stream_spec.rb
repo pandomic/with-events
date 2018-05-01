@@ -32,7 +32,7 @@ RSpec.describe WithEvents::Stream do
     end
 
     it 'Then notifies watchers' do
-      expect(resource).to receive(:instance_exec).with(watcher)
+      expect(resource).to receive(:instance_exec)
 
       subject.notify(:name, resource)
     end
