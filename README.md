@@ -23,7 +23,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install rails-events
+$ gem install with_events
 ```
 
 ## Usage
