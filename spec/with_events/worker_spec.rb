@@ -1,4 +1,4 @@
-RSpec.describe WithEvents::Trigger do
+RSpec.describe WithEvents::Worker do
   let(:hourly_resource) { double(may_hello?: true, hello!: nil) }
 
   let(:hourly_event) do
@@ -62,10 +62,10 @@ RSpec.describe WithEvents::Trigger do
           expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
-            .to receive(:streams)
-            .and_return([double(events: [hourly_event, hourly_event_2, daily_event, regular_event])])
+            .to receive(:find)
+            .and_return(double(events: [hourly_event, hourly_event_2, daily_event, regular_event]))
 
-          subject.perform(:hourly)
+          subject.perform(:fake_stream, :hello, :hourly)
         end
       end
 
@@ -80,10 +80,10 @@ RSpec.describe WithEvents::Trigger do
           expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
-            .to receive(:streams)
-            .and_return([double(events: [daily_event, hourly_event_2, regular_event])])
+            .to receive(:find)
+            .and_return(double(events: [daily_event, hourly_event_2, regular_event]))
 
-          subject.perform(:hourly)
+          subject.perform(:fake_stream, :hello, :hourly)
         end
       end
     end
@@ -100,10 +100,10 @@ RSpec.describe WithEvents::Trigger do
           expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
-            .to receive(:streams)
-            .and_return([double(events: [hourly_event, hourly_event_2, daily_event, regular_event])])
+            .to receive(:find)
+            .and_return(double(events: [hourly_event, hourly_event_2, daily_event, regular_event]))
 
-          subject.perform(:daily)
+          subject.perform(:fake_stream, :hello2, :daily)
         end
       end
 
@@ -118,10 +118,10 @@ RSpec.describe WithEvents::Trigger do
           expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
-            .to receive(:streams)
-            .and_return([double(events: [hourly_event, hourly_event_2, regular_event])])
+            .to receive(:find)
+            .and_return(double(events: [hourly_event, hourly_event_2, regular_event]))
 
-          subject.perform(:daily)
+          subject.perform(:fake_stream, :hello2, :daily)
         end
       end
     end
