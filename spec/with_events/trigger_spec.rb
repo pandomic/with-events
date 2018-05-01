@@ -1,20 +1,65 @@
 RSpec.describe WithEvents::Trigger do
-  let(:hourly_event) { double(name: :hello, may_hello?: true, hello!: nil, options: { background: true, appearance: :hourly }) }
-  let(:hourly_event_2) { double(name: :hi, may_hi?: false, hi!: nil, options: { background: true, appearance: :hourly }) }
-  let(:daily_event) { double(name: :hello2, may_hello2?: true, hello2!: nil, options: { background: true, appearance: :daily }) }
-  let(:regular_event) { double(name: :hello3, may_hello3?: true, hello3!: nil, options: {}) }
+  let(:hourly_resource) { double(may_hello?: true, hello!: nil) }
+
+  let(:hourly_event) do
+    double(
+      name: :hello,
+      options: {
+        background: true,
+        appearance: :hourly,
+        batch: [hourly_resource]
+      }
+    )
+  end
+
+  let(:hourly_resource_2) { double(may_hi?: false, hi!: nil) }
+
+  let(:hourly_event_2) do
+    double(
+      name: :hi,
+      options: {
+        background: true,
+        appearance: :hourly,
+        batch: [hourly_resource_2]
+      }
+    )
+  end
+
+  let(:daily_resource) { double(may_hello2?: true, hello2!: nil) }
+
+  let(:daily_event) do
+    double(
+      name: :hello2,
+      may_hello2?: true,
+      hello2!: nil,
+      options: {
+        background: true,
+        appearance: :daily,
+        batch: [daily_resource]
+      }
+    )
+  end
+
+  let(:regular_resource) { double(may_hello3?: true, hello3!: nil) }
+
+  let(:regular_event) do
+    double(
+      name: :hello3,
+      options: {}
+    )
+  end
 
   describe 'When calling #perform' do
     context 'And calling for hourly tasks' do
       context 'And there are hourly tasks registered' do
         it 'Then executes available hourly tasks only' do
-          expect(hourly_event).to receive(:hello!)
+          expect(hourly_resource).to receive(:hello!)
 
-          expect(hourly_event_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hi!)
 
-          expect(daily_event).not_to receive(:hello2!)
+          expect(daily_resource).not_to receive(:hello2!)
 
-          expect(regular_event).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
             .to receive(:streams)
@@ -26,13 +71,13 @@ RSpec.describe WithEvents::Trigger do
 
       context 'And there are no hourly tasks registered' do
         it 'Then executes nothing' do
-          expect(hourly_event).not_to receive(:hello!)
+          expect(hourly_resource).not_to receive(:hello!)
 
-          expect(hourly_event_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hi!)
 
-          expect(daily_event).not_to receive(:hello2!)
+          expect(daily_resource).not_to receive(:hello2!)
 
-          expect(regular_event).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
             .to receive(:streams)
@@ -46,13 +91,13 @@ RSpec.describe WithEvents::Trigger do
     context 'And calling for daily tasks' do
       context 'And there are daily tasks registered' do
         it 'Then executes available daily tasks only' do
-          expect(hourly_event).not_to receive(:hello!)
+          expect(hourly_resource).not_to receive(:hello!)
 
-          expect(hourly_event_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hi!)
 
-          expect(daily_event).to receive(:hello2!)
+          expect(daily_resource).to receive(:hello2!)
 
-          expect(regular_event).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
             .to receive(:streams)
@@ -64,13 +109,13 @@ RSpec.describe WithEvents::Trigger do
 
       context 'And there are no daily tasks registered' do
         it 'Then executes nothing' do
-          expect(hourly_event).not_to receive(:hello!)
+          expect(hourly_resource).not_to receive(:hello!)
 
-          expect(hourly_event_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hi!)
 
-          expect(daily_event).not_to receive(:hello2!)
+          expect(daily_resource).not_to receive(:hello2!)
 
-          expect(regular_event).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello3!)
 
           allow(WithEvents::Stream)
             .to receive(:streams)

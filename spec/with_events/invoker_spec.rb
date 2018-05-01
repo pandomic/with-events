@@ -3,12 +3,12 @@ RSpec.describe WithEvents::Invoker do
     subject { described_class.new(callable) }
 
     context 'And calling for Proc' do
-      let(:callable) { ->{} }
+      let(:callable) { ->(*_args){} }
 
       it 'Then executes Proc in context and passes necessary arguments' do
         context = double
 
-        expect(context).to receive(:instance_exec).with(callable, 1, 2, 3)
+        expect(context).to receive(:instance_exec).with(1, 2, 3, &callable)
 
         subject.invoke(context, 1, 2, 3)
       end
