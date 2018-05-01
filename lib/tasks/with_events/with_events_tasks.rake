@@ -7,7 +7,7 @@ namespace :with_events do
   end
 
   desc 'Run hourly tasks'
-  task :daily do
+  task :hourly do
     WithEvents::Trigger.perform_async(WithEvents::Trigger::HOURLY_APPEARANCE)
   end
 end
