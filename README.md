@@ -1,3 +1,5 @@
+![Build status](https://travis-ci.org/pandomic/with-events.svg?branch=master)
+
 # WithEvents
 A simple events system for Ruby apps.
 
@@ -11,7 +13,7 @@ A simple events system for Ruby apps.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rails-events'
+gem 'with-events'
 ```
 
 And then execute:
