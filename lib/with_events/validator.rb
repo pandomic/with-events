@@ -24,7 +24,7 @@ module WithEvents
     def valid_appearance?(event, appearance)
       [HOURLY_APPEARANCE, DAILY_APPEARANCE]
         .include?(event.options[:appearance]) &&
-        event.options[:appearance] == appearance
+        event.options[:appearance] == appearance.to_sym
     end
   end
 end
