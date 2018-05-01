@@ -13,7 +13,7 @@ A simple events system for Ruby apps.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'with-events'
+gem 'with_events'
 ```
 
 And then execute:
@@ -54,7 +54,7 @@ hero = MyHeroClass.new
 hero.game_over! if hero.game_over?
 ```
 
-### Using with daily/hourly rake triggers
+### Using with daily/hourly rake triggers for batch processing
 
 You may want to automate a bit the process of asking resources if
 they are ready to trigger events (by calling `#may_*?`). This can
@@ -75,7 +75,8 @@ class MyHeroClass
           condition: :really_game_over?,
           callback: :call_me_if_game_over,
           background: true,
-          appearance: :daily # or :hourly
+          appearance: :daily, # or :hourly
+          batch: User.active  # any Enumerable
   end
   
   def really_game_over?
