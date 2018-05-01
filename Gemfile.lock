@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    with_events (0.1.4)
+    with_events (0.1.5)
       activesupport (~> 4.2.7)
       require_all (~> 1.4.0)
       sidekiq (~> 3.5.3)
