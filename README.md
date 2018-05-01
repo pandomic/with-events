@@ -26,6 +26,14 @@ Or install it yourself as:
 $ gem install with_events
 ```
 
+If you are going to use included rake tasks, add this to your
+Rakefile:
+
+```ruby
+spec = Gem::Specification.find_by_name 'with_events'
+load "#{spec.gem_dir}/lib/tasks/with_events/with_events_tasks.rake"
+```
+
 ## Usage
 
 ### Basic Usage
