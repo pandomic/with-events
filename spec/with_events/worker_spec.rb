@@ -7,7 +7,7 @@ RSpec.describe WithEvents::Worker do
       options: {
         background: true,
         appearance: :hourly,
-        batch: [hourly_resource]
+        batch: -> { [hourly_resource] }
       }
     )
   end
@@ -20,7 +20,7 @@ RSpec.describe WithEvents::Worker do
       options: {
         background: true,
         appearance: :hourly,
-        batch: [hourly_resource_2]
+        batch: -> { [hourly_resource_2] }
       }
     )
   end
@@ -35,7 +35,7 @@ RSpec.describe WithEvents::Worker do
       options: {
         background: true,
         appearance: :daily,
-        batch: [daily_resource]
+        batch: -> { [daily_resource] }
       }
     )
   end

@@ -14,7 +14,7 @@ module WithEvents
     private
 
     def valid_batch?(event)
-      event.options[:batch].is_a?(Enumerable)
+      event.options[:batch].is_a?(Proc)
     end
 
     def background_event?(event)
