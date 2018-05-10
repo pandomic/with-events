@@ -84,7 +84,7 @@ class MyHeroClass
           callback: :call_me_if_game_over,
           background: true,
           appearance: :daily, # or :hourly
-          batch: User.active.find_each # any Enumerable
+          batch: -> { User.active.find_each } # any Enumerable
   end
   
   def really_game_over?
