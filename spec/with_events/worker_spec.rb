@@ -1,5 +1,5 @@
 RSpec.describe WithEvents::Worker do
-  let(:hourly_resource) { double(may_hello?: true, hello!: nil) }
+  let(:hourly_resource) { double(hello?: true, hello!: nil) }
 
   let(:hourly_event) do
     double(
@@ -12,7 +12,7 @@ RSpec.describe WithEvents::Worker do
     )
   end
 
-  let(:hourly_resource_2) { double(may_hi?: false, hi!: nil) }
+  let(:hourly_resource_2) { double(hi?: false, hi!: nil) }
 
   let(:hourly_event_2) do
     double(
@@ -25,12 +25,12 @@ RSpec.describe WithEvents::Worker do
     )
   end
 
-  let(:daily_resource) { double(may_hello2?: true, hello2!: nil) }
+  let(:daily_resource) { double(hello2?: true, hello2!: nil) }
 
   let(:daily_event) do
     double(
       name: :hello2,
-      may_hello2?: true,
+      hello2?: true,
       hello2!: nil,
       options: {
         background: true,
@@ -40,7 +40,7 @@ RSpec.describe WithEvents::Worker do
     )
   end
 
-  let(:regular_resource) { double(may_hello3?: true, hello3!: nil) }
+  let(:regular_resource) { double(hello3?: true, hello3!: nil) }
 
   let(:regular_event) do
     double(

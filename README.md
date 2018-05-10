@@ -65,7 +65,7 @@ hero.game_over! if hero.game_over?
 ### Using with daily/hourly rake triggers for batch processing
 
 You may want to automate a bit the process of asking resources if
-they are ready to trigger events (by calling `#may_*?`). This can
+they are ready to trigger events (by calling `#*?`). This can
 be easily done by using `background: true` 
 with `appearance: :daily # or hourly` options.
 

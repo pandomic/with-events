@@ -4,15 +4,15 @@ RSpec.describe WithEvents::Event do
   end
 
   describe 'When initializing' do
-    it 'Then defines #may_*? and #*! methods on the klass' do
+    it 'Then defines #*? and #*! methods on the klass' do
       described_class.new(:hello_world, dummy_class)
 
-      expect(dummy_class.instance_methods).to include(:may_hello_world?)
+      expect(dummy_class.instance_methods).to include(:hello_world?)
       expect(dummy_class.instance_methods).to include(:hello_world!)
     end
   end
 
-  describe 'When calling #may_*? method' do
+  describe 'When calling #*? method' do
     before do
       described_class.new(:hello_world, dummy_class)
     end
@@ -20,7 +20,7 @@ RSpec.describe WithEvents::Event do
     it 'Executes Invoker' do
       expect_any_instance_of(WithEvents::Invoker).to receive(:invoke)
 
-      dummy_class.new.may_hello_world?
+      dummy_class.new.hello_world?
     end
   end
 
