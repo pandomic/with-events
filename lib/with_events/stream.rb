@@ -2,13 +2,14 @@
 
 module WithEvents
   class Stream
-    attr_reader :name, :klass, :events, :watchers
+    attr_reader :name, :klass, :events, :watchers, :batch
 
-    def initialize(name, klass)
+    def initialize(name, klass, options = {})
       @name = name
       @klass = klass
       @events = []
       @watchers = {}
+      @batch = options[:batch]
 
       self.class.streams << self
     end
@@ -32,8 +33,8 @@ module WithEvents
         @streams ||= []
       end
 
-      def find_or_initialize(name, klass)
-        find(name) || new(name, klass)
+      def find_or_initialize(name, klass, options = {})
+        find(name) || new(name, klass, options)
       end
 
       def find(name)

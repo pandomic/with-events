@@ -4,23 +4,23 @@ RSpec.describe WithEvents::Worker do
   let(:hourly_event) do
     double(
       name: :hello,
+      stream: double(batch: -> {}),
       options: {
         background: true,
         appearance: :hourly,
-        batch: [hourly_resource]
       }
     )
   end
 
-  let(:hourly_resource_2) { double(hi?: false, hi!: nil) }
+  let(:hourly_resource_2) { double(hello?: false, hello!: nil) }
 
   let(:hourly_event_2) do
     double(
       name: :hi,
+      stream: double(batch: -> {}),
       options: {
         background: true,
         appearance: :hourly,
-        batch: [hourly_resource_2]
       }
     )
   end
@@ -30,21 +30,22 @@ RSpec.describe WithEvents::Worker do
   let(:daily_event) do
     double(
       name: :hello2,
+      stream: double(batch: -> {}),
       hello2?: true,
       hello2!: nil,
       options: {
         background: true,
         appearance: :daily,
-        batch: [daily_resource]
       }
     )
   end
 
-  let(:regular_resource) { double(hello3?: true, hello3!: nil) }
+  let(:regular_resource) { double(hello2?: true, hello2!: nil) }
 
   let(:regular_event) do
     double(
       name: :hello3,
+      stream: double(batch: -> {}),
       options: {}
     )
   end
@@ -55,15 +56,17 @@ RSpec.describe WithEvents::Worker do
         it 'Then executes available hourly tasks only' do
           expect(hourly_resource).to receive(:hello!)
 
-          expect(hourly_resource_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hello!)
 
           expect(daily_resource).not_to receive(:hello2!)
 
-          expect(regular_resource).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello2!)
 
           allow(WithEvents::Stream)
             .to receive(:find)
-            .and_return(double(events: [hourly_event, hourly_event_2, daily_event, regular_event]))
+            .and_return(double(batch: -> { [hourly_resource] },
+                               events: [hourly_event, hourly_event_2,
+                                        daily_event, regular_event]))
 
           subject.perform(:fake_stream, :hello, :hourly)
         end
@@ -73,15 +76,17 @@ RSpec.describe WithEvents::Worker do
         it 'Then executes nothing' do
           expect(hourly_resource).not_to receive(:hello!)
 
-          expect(hourly_resource_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hello!)
 
           expect(daily_resource).not_to receive(:hello2!)
 
-          expect(regular_resource).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello2!)
 
           allow(WithEvents::Stream)
             .to receive(:find)
-            .and_return(double(events: [daily_event, hourly_event_2, regular_event]))
+            .and_return(double(batch: -> { [hourly_resource] },
+                               events: [daily_event,
+                                        hourly_event_2, regular_event]))
 
           subject.perform(:fake_stream, :hello, :hourly)
         end
@@ -93,16 +98,17 @@ RSpec.describe WithEvents::Worker do
         it 'Then executes available daily tasks only' do
           expect(hourly_resource).not_to receive(:hello!)
 
-          expect(hourly_resource_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hello!)
 
           expect(daily_resource).to receive(:hello2!)
 
-          expect(regular_resource).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello2!)
 
           allow(WithEvents::Stream)
             .to receive(:find)
-            .and_return(double(events: [hourly_event, hourly_event_2, daily_event, regular_event]))
-
+            .and_return(double(batch: -> { [daily_resource] },
+                               events: [hourly_event, hourly_event_2,
+                                        daily_event, regular_event]))
           subject.perform(:fake_stream, :hello2, :daily)
         end
       end
@@ -111,16 +117,17 @@ RSpec.describe WithEvents::Worker do
         it 'Then executes nothing' do
           expect(hourly_resource).not_to receive(:hello!)
 
-          expect(hourly_resource_2).not_to receive(:hi!)
+          expect(hourly_resource_2).not_to receive(:hello!)
 
           expect(daily_resource).not_to receive(:hello2!)
 
-          expect(regular_resource).not_to receive(:hello3!)
+          expect(regular_resource).not_to receive(:hello2!)
 
           allow(WithEvents::Stream)
             .to receive(:find)
-            .and_return(double(events: [hourly_event, hourly_event_2, regular_event]))
-
+            .and_return(double(batch: -> { [daily_resource] },
+                               events: [hourly_event, hourly_event_2,
+                                        regular_event]))
           subject.perform(:fake_stream, :hello2, :daily)
         end
       end

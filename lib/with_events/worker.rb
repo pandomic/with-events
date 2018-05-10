@@ -11,7 +11,7 @@ module WithEvents
 
     def perform(stream, event_name, appearance)
       events(stream, event_name, appearance).each do |event|
-        event.options[:batch].each do |resource|
+        stream(stream).batch.call.each do |resource|
           call(event, resource) if may_call?(event, resource)
         end
       end

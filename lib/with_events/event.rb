@@ -2,7 +2,7 @@
 
 module WithEvents
   class Event
-    attr_reader :name, :options
+    attr_reader :name, :options, :stream
 
     def initialize(name, klass, options = {})
       @name = name
@@ -18,7 +18,7 @@ module WithEvents
 
     private
 
-    attr_reader :klass, :stream, :condition, :callback
+    attr_reader :klass, :condition, :callback
 
     def define_condition
       klass.instance_exec(name, condition) do |name, condition|

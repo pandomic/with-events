@@ -9,8 +9,8 @@ module WithEvents
   autoload_all __dir__ + '/with_events'
 
   module ClassMethods
-    def stream(name, &block)
-      Stream.find_or_initialize(name, self).instance_exec(&block)
+    def stream(name, options = {}, &block)
+      Stream.find_or_initialize(name, self, options).instance_exec(&block)
     end
   end
 end
