@@ -29,7 +29,7 @@ module WithEvents
     end
 
     def may_call?(event, resource)
-      resource.public_send("may_#{event.name}?")
+      resource.public_send("#{event.name}?")
     rescue => e
       exceptions << e
     end

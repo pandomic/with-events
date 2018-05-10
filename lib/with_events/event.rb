@@ -22,7 +22,7 @@ module WithEvents
 
     def define_condition
       klass.instance_exec(name, condition) do |name, condition|
-        define_method("may_#{name}?") do
+        define_method("#{name}?") do
           Invoker.new(condition).invoke(self)
         end
       end
