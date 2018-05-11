@@ -2,8 +2,20 @@
 
 module WithEvents
   class Event
-    attr_reader :name, :options
+    attr_reader :name, :identifier, :options, :callback,
+                :condition, :stream, :finder
 
+    ##
+    # ==Options:
+    #
+    # +name+ - event name
+    # +klass+ - resource class name
+    # +options[:condition]+ - condition to check whether event can be triggered
+    # +options[:callback]+ - callback to invoke on event
+    # +options[:stream]+ - stream object event belongs to
+    # +options[:identifier]+ - resource identifier (symbol, Proc or Class)
+    # +options[:finder]+ - resource finder (symbol, Proc or Class)
+    # +options[:subscribe]+ - subscribe to SQS queue
     def initialize(name, klass, options = {})
       @name = name
       @klass = klass
@@ -11,6 +23,8 @@ module WithEvents
       @condition = options[:condition]
       @callback = options[:callback]
       @stream = options[:stream]
+      @identifier = options[:identifier]
+      @finder = options[:finder]
 
       define_condition
       define_callback
@@ -18,21 +32,26 @@ module WithEvents
 
     private
 
-    attr_reader :klass, :stream, :condition, :callback
+    attr_reader :klass
 
     def define_condition
-      klass.instance_exec(name, condition) do |name, condition|
-        define_method("#{name}?") do
-          Invoker.new(condition).invoke(self)
+      return unless condition
+
+      klass.instance_exec(self) do |event|
+        define_method("#{event.name}?") do
+          Invoker.new(event.condition).invoke(self)
         end
       end
     end
 
     def define_callback
-      klass.instance_exec(name, stream, callback) do |name, stream, callback|
-        define_method("#{name}!") do
-          stream&.notify(name, self)
-          Invoker.new(callback).invoke(self)
+      return unless callback
+
+      klass.instance_exec(self) do |event|
+        define_method("#{event.name}!") do
+          event.stream.notify(event, self)
+          return if event.stream.subscribe
+          Invoker.new(event.callback).invoke(self)
         end
       end
     end

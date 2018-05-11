@@ -1,13 +1,15 @@
 ![Build status](https://travis-ci.org/pandomic/with_events.svg?branch=master)
 
 # WithEvents
-A simple events system for Ruby apps.
+A simple events system for Ruby apps which supports 
+bi-directional SNS/SQS messaging.
 
 ## Dependencies
 * Ruby >= 2.3.3
 * Rake >= 12.3.1
 * Activesupport >= 4.2.7
 * Sidekiq >= 3.5.3
+* Circuitry 3.2
 
 ## Installation
 Add this line to your application's Gemfile:
@@ -26,6 +28,10 @@ Or install it yourself as:
 $ gem install with_events
 ```
 
+## Configuration
+
+### Setting up a Rakefile
+
 If you are going to use included rake tasks, add this to your
 Rakefile:
 
@@ -34,9 +40,16 @@ spec = Gem::Specification.find_by_name 'with_events'
 load "#{spec.gem_dir}/lib/tasks/with_events/with_events_tasks.rake"
 ```
 
+### Setting up Circuitry
+
+If you would like to use SNS/SQS subscribing/publishing features,
+you need to configure Circuitry gem. Just follow [this instructions](https://github.com/kapost/circuitry#usage).
+
 ## Usage
 
-### Basic Usage
+### Basic Usage (in-app publish/subscribe)
+This type of messaging does not require Rakefile or Circuitry configuration.
+
 ```ruby
 require 'with_events'
 
@@ -60,6 +73,43 @@ end
 
 hero = MyHeroClass.new
 hero.game_over! if hero.game_over?
+```
+
+There might be situations where you will have a lot of events
+which have pretty same configuration. To make life easier, you
+can use `configure_all` method, which will aply configuration for
+all events in the stream.
+
+```ruby
+require 'with_events'
+
+class MyHeroClass
+  include WithEvents
+  
+  stream :my_lovely_stream do
+    configure_all callback: :call_me_if_game_over
+    
+    event :event_one,
+          condition: -> { true }
+          
+    event :event_one,
+          condition: -> { false }
+  end
+  
+  def really_game_over?
+    true
+  end
+  
+  def call_me_if_game_over
+    puts 'Game over'
+  end
+end
+
+hero = MyHeroClass.new
+hero.event_one!
+#=> Game over
+hero.event_two!
+#=> Game over
 ```
 
 ### Using with daily/hourly rake triggers for batch processing
@@ -113,12 +163,80 @@ WithEvents::Stream.find(:my_lovely_stream).on(:game_over) do
 end
 ```
 
+**NOTE that this will also subscribe you to SQS/SNS events.**
+
+### Sending events to SNS/SQS
+
+You may send messages to SNS/SQS by setting a `topic` option for
+the stream. In addition, you need to specify `identifier` option.
+
+`identifier` option (symbol, Proc, Class) allows to identify incoming message and
+bind an `id` for outgoing ones.
+
+```ruby
+require 'with_events'
+
+class MyModel < ActiveRecord::Base
+  include WithEvents
+  
+  stream :my_lovely_stream, topic: 'my-topic' do
+    event :game_over,
+          condition: :really_game_over?,
+          callback: :call_me_if_game_over,
+          identifier: :id, # symbol, Proc or Class
+  end
+  
+  def really_game_over?
+    true
+  end
+  
+  def call_me_if_game_over
+    puts 'Game over'
+  end
+end
+```
+
+### Subscribing to SNS/SQS events
+
+To subscribe to SNS/SQS events you need to specify `topic` and
+`finder` options.
+
+The `finder` option represents invokable type which should return
+resource identified by `identifier` invokable by the sender.
+
+**NOTE that subscriber will take the process. Run it in a separate process**
+
+```ruby
+require 'with_events'
+
+class MyClass
+  include WithEvents
+  
+  stream :my_lovely_stream, topic: 'my-topic' do
+    event :game_over,
+          condition: :really_game_over?,
+          callback: :call_me_if_game_over,
+          finder: ->(message) { SomeModel.find(message.id) }
+  end
+  
+  def really_game_over?
+    true
+  end
+  
+  def call_me_if_game_over
+    puts 'Game over'
+  end
+end
+
+WithEvents::Stream.subscribe # NOTE this line
+```
+
 ### Supported invokable types
 * Proc
 * Symbol
 * Class
 
-You may use them as `condition` or `callback` arguments.
+You may use them for `condition`, `callback`, `identifier` or `finder` options.
 
 ```ruby
 class CallbackClass
