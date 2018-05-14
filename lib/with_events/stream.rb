@@ -21,6 +21,11 @@ module WithEvents
         Event.new(name, klass, options.merge(configuration).merge(stream: self))
     end
 
+    def reset_configure_all
+      @configuration = {}
+      self
+    end
+
     def configure_all(options = {})
       @configuration = options
     end

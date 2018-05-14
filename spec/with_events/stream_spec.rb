@@ -30,6 +30,28 @@ RSpec.describe WithEvents::Stream do
     end
   end
 
+  describe 'When calling #reset_configure_all' do
+    let(:stream) { double }
+
+    it 'Then resets default configuration for all events' do
+      subject.configure_all(identifier: :id)
+
+      expect(WithEvents::Event)
+        .to receive(:new)
+        .with(:test, klass, { identifier: :id, stream: subject })
+
+      subject.event(:test)
+
+      subject.reset_configure_all
+
+      expect(WithEvents::Event)
+        .to receive(:new)
+        .with(:test, klass, { stream: subject })
+
+      subject.event(:test)
+    end
+  end
+
   describe 'When calling #notify' do
     let(:stream) { double }
 

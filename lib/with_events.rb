@@ -10,7 +10,9 @@ module WithEvents
 
   module ClassMethods
     def stream(name, options = {}, &block)
-      Stream.find_or_initialize(name, self, options).instance_exec(&block)
+      Stream.find_or_initialize(name, self, options)
+            .reset_configure_all
+            .instance_exec(&block)
     end
   end
 end
