@@ -4,24 +4,13 @@ RSpec.describe WithEvents::Event do
   end
 
   describe 'When initializing' do
-    context 'And condition and callback are set' do
-      it 'Then defines #*? and #*! methods on the klass' do
-        described_class.new(:hello_world, dummy_class,
-                            condition: :a,
-                            callback: :b)
+    it 'Then defines #*? and #*! methods on the klass' do
+      described_class.new(:hello_world, dummy_class,
+                          condition: :a,
+                          callback: :b)
 
-        expect(dummy_class.instance_methods).to include(:hello_world?)
-        expect(dummy_class.instance_methods).to include(:hello_world!)
-      end
-    end
-
-    context 'And condition and callback are not set' do
-      it 'Then does not defines #*? and #*! methods on the klass' do
-        described_class.new(:hello_world, dummy_class)
-
-        expect(dummy_class.instance_methods).not_to include(:hello_world?)
-        expect(dummy_class.instance_methods).not_to include(:hello_world!)
-      end
+      expect(dummy_class.instance_methods).to include(:hello_world?)
+      expect(dummy_class.instance_methods).to include(:hello_world!)
     end
   end
 

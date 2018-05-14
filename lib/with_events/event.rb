@@ -39,18 +39,17 @@ module WithEvents
 
       klass.instance_exec(self) do |event|
         define_method("#{event.name}?") do
+          return false unless event.condition
           Invoker.new(event.condition).invoke(self)
         end
       end
     end
 
     def define_callback
-      return unless callback
-
       klass.instance_exec(self) do |event|
         define_method("#{event.name}!") do
           event.stream.notify(event, self)
-          return if event.stream.subscribe
+          return if event.stream.subscribe || !event.callback
           Invoker.new(event.callback).invoke(self)
         end
       end
