@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   ]
 
   s.add_dependency 'activesupport', '~> 4.2.7'
+  s.add_dependency 'circuitry', '3.2'
   s.add_dependency 'require_all', '~> 1.4.0'
   s.add_dependency 'sidekiq', '~> 3.5.3'
 
