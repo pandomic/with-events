@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    with_events (0.1.11)
+    with_events (0.1.12)
       activesupport (~> 4.2.7)
       circuitry (= 3.2)
       require_all (~> 1.4.0)
